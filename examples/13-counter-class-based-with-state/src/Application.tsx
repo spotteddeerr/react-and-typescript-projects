@@ -1,4 +1,4 @@
-import { Component, ChangeEvent, FormEvent } from 'react';
+import { ChangeEvent, Component } from 'react';
 
 type CounterProps = {
   incident: string;
@@ -13,20 +13,26 @@ class Counter extends Component<CounterProps, CounterState> {
     count: 0
   };
 
-  increment = () => this.setState(({ count }) => ({ count: count + 1 }));
-  decrement = () => this.setState(({ count }) => ({ count: count - 1 }));
-  reset = () => this.setState({ count: 0 });
-  handleChange = (e: ChangeEvent<HTMLInputElement>) =>
-    this.setState({ count: +e.target.value });
-  handleSubmit = (e: FormEvent<HTMLInputElement>) => {
-    e.preventDefault();
+  increment = () => {
+    this.setState(({ count }) => ({ count: count + 1 }));
   };
-  // props = {
-  //   incident:incident,
-  // }
+
+  decrement = () => {
+    this.setState(({ count }) => ({ count: count - 1 }));
+  };
+
+  reset = () => {
+    this.setState({ count: 0 });
+  };
+
+  changeCount = (event: ChangeEvent<HTMLInputElement>) => {
+    this.setState({ count: +event.target.value });
+  };
+
   render() {
     const { incident } = this.props;
     const { count } = this.state;
+
     return (
       <main className="Counter">
         <h1>Days Since Last {incident}</h1>
@@ -37,10 +43,13 @@ class Counter extends Component<CounterProps, CounterState> {
           <button onClick={this.decrement}>Decrement</button>
         </section>
         <section className="controls">
-          <form onSubmit={this.handleSubmit}>
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+            }}
+          >
             <label htmlFor="set-to">Set Count</label>
-            <input onChange={this.handleChange} id="set-to" type="number" />
-            <input type="submit" />
+            <input id="set-to" type="number" />
           </form>
         </section>
       </main>
@@ -50,7 +59,7 @@ class Counter extends Component<CounterProps, CounterState> {
 
 class Application extends Component {
   render() {
-    return <Counter incident="play" />;
+    return <Counter incident={'Coffee Spill'} />;
   }
 }
 

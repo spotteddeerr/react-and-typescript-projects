@@ -26,7 +26,12 @@ const Counter = ({ incident }: CounterProps) => {
       <section className="controls">
         <form onSubmit={handleSubmit}>
           <label htmlFor="set-to">Set Count</label>
-          <input onChange={handleChange} id="set-to" type="number" />
+          <input
+            onChange={handleChange}
+            id="set-to"
+            type="number"
+            value={count}
+          />
           <input type="submit" />
         </form>
       </section>

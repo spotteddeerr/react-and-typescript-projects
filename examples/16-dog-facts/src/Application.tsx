@@ -1,24 +1,26 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState } from 'react';
 import { fetchDogFacts, DogFactType } from './dog-facts';
 
 type FormProps = {
-  onSubmit: (n: number) => void;
+  onSubmit: (value: number) => void;
 };
 
 const Form = ({ onSubmit }: FormProps) => {
-  const [value, setValue] = useState<number>(1);
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    onSubmit(value);
-  };
+  const [value, setValue] = useState(1);
+
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        onSubmit(value);
+      }}
+    >
       <div className="fact-input">
         <label htmlFor="number-of-facts">Number of Dog Facts</label>
         <input
           onChange={(e) => setValue(+e.target.value)}
-          value={value}
           type="number"
+          value={value}
           min="1"
           max="10"
           id="number-of-facts"
@@ -40,14 +42,16 @@ const Fact = ({ fact }: { fact: string }) => {
 
 const Application = () => {
   const [facts, setFacts] = useState<DogFactType[]>([]);
-  const handleSubmit = (n: number) => {
-    fetchDogFacts(n).then((facts) => setFacts(facts));
+  const handleSubmit = (value: number) => {
+    fetchDogFacts(value).then((facts) => setFacts(facts));
   };
   return (
     <main>
       <Form onSubmit={handleSubmit} />
       <section>
-        {facts && facts.map((fact) => <Fact fact={fact.fact} key={fact.id} />)}
+        {facts.map((fact) => (
+          <Fact fact={fact.fact} key={fact.id} />
+        ))}
       </section>
     </main>
   );
